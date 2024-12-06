@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostalCode {
+    private int id;
     private String cpAsentamiento;
     private String nombreAsentamiento;
     private String tipoAsentamiento;

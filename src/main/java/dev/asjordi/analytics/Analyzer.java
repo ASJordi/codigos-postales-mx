@@ -1,5 +1,7 @@
 package dev.asjordi.analytics;
 
+import dev.asjordi.database.repository.IRepository;
+import dev.asjordi.database.repository.PostalCodeRepository;
 import dev.asjordi.model.PostalCode;
 import dev.asjordi.processor.PostalCodeDataLoader;
 import java.util.*;
@@ -9,6 +11,7 @@ public class Analyzer {
 
     private List<PostalCode> postalCodeList;
     private static final Analyzer INSTANCE = new Analyzer();
+    private IRepository<PostalCode> repo = new PostalCodeRepository();
 
     private Analyzer() {
         init();
@@ -16,7 +19,8 @@ public class Analyzer {
 
     private void init() {
         PostalCodeDataLoader loader = new PostalCodeDataLoader();
-        postalCodeList = loader.getPostalCodeList();
+//        postalCodeList = loader.getPostalCodeList();
+        postalCodeList = repo.getAll();
     }
 
     public static Analyzer getInstance() {

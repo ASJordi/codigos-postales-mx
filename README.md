@@ -4,19 +4,25 @@
 
 ## About :computer:
 
-Programa que permite leer, procesar y filtrar de acuerdo a múltiples criterios todos los códigos postales e información relacionada con ellos de México. La información es obtenida de la base de datos del Servicio Postal Mexicano (SEPOMEX) disponible en su [página oficial](https://www.correosdemexico.gob.mx/SSLServicios/ConsultaCP/CodigoPostal_Exportar.aspx). Los datos se encuentran en formato CSV, ya han sido limpiados y se están listos para ser procesados, tanto de forma general como por estado.
+Programa que permite leer, procesar y filtrar de acuerdo a múltiples criterios todos los códigos postales e información relacionada con ellos de México. La información es obtenida de la base de datos del Servicio Postal Mexicano (SEPOMEX) disponible en su [página oficial](https://www.correosdemexico.gob.mx/SSLServicios/ConsultaCP/CodigoPostal_Exportar.aspx). 
+
+Los datos se encuentran en formato CSV, ya han sido limpiados y se están listos para ser procesados, tanto de forma general como por estado. La descripción para cada campo se encuentra disponible en el siguiente [enlace](https://www.correosdemexico.gob.mx/SSLServicios/ConsultaCP/imagenes/Descrip.pdf)
 
 ## Características :sparkles:
 
 - Leer los datos directamente desde múltiples archivos CSV.
 - Procesar y agrupar los datos en una colección.
 - Filtrar los códigos postales de acuerdo a múltiples criterios.
+- Permite guardar toda la información en una base de datos usando batch processing.
+- Intercambiar entre el origen de datos desde el que se obtiene la información.
 
 ### Clases :books:
 
 - `PostalCode`: Clase que representa un código postal.
 - `PostalCodeDataLoader`. Lee los datos de los archivos CSV y los almacena en una colección.
 - `Analyzer`. Clase que permite filtrar los códigos postales de acuerdo a múltiples criterios.
+- `database package`. Clases que permiten interactuar con una base de datos.
+- `DatabaseUtil`. Permite guardar la información en una base de datos usando batch processing.
 
 ## Tecnologías :gear:
 

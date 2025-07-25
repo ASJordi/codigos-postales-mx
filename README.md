@@ -16,13 +16,22 @@ Los datos se encuentran en formato CSV, ya han sido limpiados y se están listos
 - Permite guardar toda la información en una base de datos usando batch processing.
 - Intercambiar entre el origen de datos desde el que se obtiene la información.
 
-### Clases :books:
+## Arquitectura :building_construction:
 
-- `PostalCode`: Clase que representa un código postal.
-- `PostalCodeDataLoader`. Lee los datos de los archivos CSV y los almacena en una colección.
-- `Analyzer`. Clase que permite filtrar los códigos postales de acuerdo a múltiples criterios.
-- `database package`. Clases que permiten interactuar con una base de datos.
-- `DatabaseUtil`. Permite guardar la información en una base de datos usando batch processing.
+El proyecto sigue una arquitectura limpia y organizada por capas, aplicando principios de diseño de software para mejorar su mantenibilidad y escalabilidad.
+
+- **Capas de la Aplicación:**
+  - `model`: Contiene las entidades de la aplicación, como la clase `PostalCode`.
+  - `persistence`: Encargada de la persistencia de datos. Se divide en:
+    - `repository`: Define las interfaces para el acceso a datos (`IDataReader`, `IDataManager`, `IRepository`).
+    - `file`: Implementaciones para leer datos desde archivos CSV (`PostalCodeDataLoader`).
+    - `db`: Implementaciones para la interacción con la base de datos (`PostalCodeRepository`, `ConnectionDatabase`).
+  - `service`: Contiene la lógica de negocio, como la clase `Analyzer`.
+  - `util`: Clases de utilidad, como `DatabaseUtil`.
+
+- **Patrones de Diseño Aplicados:**
+  - **Strategy Pattern:** La clase `Analyzer` utiliza este patrón para desacoplar la lógica de análisis de la fuente de datos, permitiendo cambiar fácilmente entre la carga desde archivos o desde una base de datos.
+  - **Specification Pattern:** Se utiliza para crear consultas y filtros de datos de una manera flexible y reutilizable, evitando la necesidad de múltiples métodos de búsqueda en la clase `Analyzer`.
 
 ## Tecnologías :gear:
 

@@ -1,4 +1,4 @@
-package dev.asjordi.database;
+package dev.asjordi.persistence.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

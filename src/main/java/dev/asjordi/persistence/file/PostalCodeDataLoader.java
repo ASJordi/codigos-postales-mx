@@ -1,6 +1,7 @@
-package dev.asjordi.processor;
+package dev.asjordi.persistence.file;
 
 import dev.asjordi.model.PostalCode;
+import dev.asjordi.persistence.repository.IDataReader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostalCodeDataLoader {
+public class PostalCodeDataLoader implements IDataReader<PostalCode> {
 
     private final Path FOLDER_PATH = Paths.get("src/main/resources/data");
     private final List<PostalCode> postalCodeList = new ArrayList<>();
@@ -53,7 +54,8 @@ public class PostalCodeDataLoader {
         return pathList;
     }
 
-    public List<PostalCode> getPostalCodeList() {
+    @Override
+    public List<PostalCode> getAll() {
         return postalCodeList;
     }
 

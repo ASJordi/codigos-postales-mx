@@ -1,8 +1,9 @@
 package dev.asjordi;
 
-import dev.asjordi.analytics.Analyzer;
+import dev.asjordi.service.Analyzer;
 
 public class Main {
+
     public static void main( String[] args ) {
         var analyzer = Analyzer.getInstance();
 
@@ -14,4 +15,5 @@ public class Main {
         var totalCities = analyzer.getTotalCities();
         var totalPostalCodes = analyzer.getTotalPostalCodes();
     }
+
 }

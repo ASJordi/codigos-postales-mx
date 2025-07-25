@@ -1,7 +1,7 @@
-package dev.asjordi.database.repository;
+package dev.asjordi.persistence.db;
 
-import dev.asjordi.database.ConnectionDatabase;
 import dev.asjordi.model.PostalCode;
+import dev.asjordi.persistence.repository.IRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,9 +1,11 @@
 package dev.asjordi.service;
 
+import dev.asjordi.analytics.Specification;
 import dev.asjordi.model.PostalCode;
 import dev.asjordi.persistence.file.PostalCodeDataLoader;
 import dev.asjordi.persistence.repository.IDataReader;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Analyzer {
@@ -26,169 +28,106 @@ public class Analyzer {
         return INSTANCE;
     }
 
-    public Optional<PostalCode> findByPostalCode(String postalCode) {
+    /**
+     * Finds a list of items matching the specification.
+     * @param spec The specification to filter by.
+     * @return A list of matching items.
+     */
+    public List<PostalCode> find(Specification<PostalCode> spec) {
         return postalCodeList.stream()
-                .filter(p -> p.getCpAsentamiento().equalsIgnoreCase(postalCode))
+                .filter(spec::isSatisfiedBy)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Finds the first item matching the specification.
+     * @param spec The specification to filter by.
+     * @return An Optional containing the first matching item, or empty if not found.
+     */
+    public Optional<PostalCode> findFirst(Specification<PostalCode> spec) {
+        return postalCodeList.stream()
+                .filter(spec::isSatisfiedBy)
                 .findFirst();
     }
 
-    public List<PostalCode> findByState(String state) {
+    /**
+     * Gets a list of distinct string values from the data set based on a specification and a mapper.
+     * @param spec The specification to filter by.
+     * @param mapper The function to map the PostalCode object to a String.
+     * @return A list of distinct string values.
+     */
+    public List<String> getDistinct(Specification<PostalCode> spec, Function<PostalCode, String> mapper) {
         return postalCodeList.stream()
-                .filter(p -> p.getNombreEntidad().equalsIgnoreCase(state))
-                .collect(Collectors.toList());
-    }
-
-    public List<PostalCode> findByCity(String city) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreCiudad().equalsIgnoreCase(city))
-                .collect(Collectors.toList());
-    }
-
-    public List<PostalCode> findByCity(String state, String city) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreEntidad().equalsIgnoreCase(state))
-                .filter(p -> p.getNombreCiudad().equalsIgnoreCase(city))
-                .collect(Collectors.toList());
-    }
-
-    public List<PostalCode> findByMunicipality(String municipality) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreMunicipio().equalsIgnoreCase(municipality))
-                .collect(Collectors.toList());
-    }
-
-    public List<PostalCode> findByMunicipality(String state, String municipality) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreEntidad().equalsIgnoreCase(state))
-                .filter(p -> p.getNombreMunicipio().equalsIgnoreCase(municipality))
-                .collect(Collectors.toList());
-    }
-
-    public int getCountPostalCodesFromState(String state) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreEntidad().equalsIgnoreCase(state))
-                .map(PostalCode::getCpAsentamiento)
+                .filter(spec::isSatisfiedBy)
+                .map(mapper)
                 .distinct()
-                .collect(Collectors.toList())
-                .size();
-    }
-
-    public int getCountPostalCodesFromCity(String city) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreCiudad().equalsIgnoreCase(city))
-                .map(PostalCode::getCpAsentamiento)
-                .distinct()
-                .collect(Collectors.toList())
-                .size();
-    }
-
-    public int getCountPostalCodesFromMunicipality(String state, String municipality) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreEntidad().equalsIgnoreCase(state))
-                .filter(p -> p.getNombreMunicipio().equalsIgnoreCase(municipality))
-                .map(PostalCode::getCpAsentamiento)
-                .distinct()
-                .collect(Collectors.toList())
-                .size();
-    }
-
-    public List<String> getAllStates() {
-        return postalCodeList.stream()
-                .map(PostalCode::getNombreEntidad)
-                .distinct()
+                .sorted()
                 .collect(Collectors.toList());
     }
 
-    public List<String> getAllCities() {
+    /**
+     * Gets a list of all distinct string values from the data set based on a mapper.
+     * @param mapper The function to map the PostalCode object to a String.
+     * @return A list of all distinct string values.
+     */
+    public List<String> getDistinct(Function<PostalCode, String> mapper) {
         return postalCodeList.stream()
-                .map(PostalCode::getNombreCiudad)
+                .map(mapper)
                 .distinct()
+                .sorted()
                 .collect(Collectors.toList());
     }
 
-    public List<String> getAllMunicipalities() {
-        return postalCodeList.stream()
-                .map(PostalCode::getNombreMunicipio)
-                .distinct()
-                .collect(Collectors.toList());
+    /**
+     * Gets the total count of items in the data set.
+     * @return The total count.
+     */
+    public long getTotalCount() {
+        return postalCodeList.size();
     }
 
-    public List<String> getAllCitiesFromState(String state) {
+    /**
+     * Gets the count of items matching a specification.
+     * @param spec The specification to filter by.
+     * @return The count of matching items.
+     */
+    public long getCount(Specification<PostalCode> spec) {
         return postalCodeList.stream()
-                .filter(p -> p.getNombreEntidad().equalsIgnoreCase(state))
-                .map(PostalCode::getNombreCiudad)
-                .distinct()
-                .collect(Collectors.toList());
+                .filter(spec::isSatisfiedBy)
+                .count();
     }
 
-    public List<String> getAllMunicipalityFromState(String state) {
+    /**
+     * Gets the count of distinct values based on a specification and a mapper.
+     * @param spec The specification to filter by.
+     * @param mapper The function to map the PostalCode object to a String.
+     * @return The count of distinct values.
+     */
+    public long getCountDistinct(Specification<PostalCode> spec, Function<PostalCode, String> mapper) {
         return postalCodeList.stream()
-                .filter(p -> p.getNombreEntidad().equalsIgnoreCase(state))
-                .map(PostalCode::getNombreMunicipio)
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getAllMunicipalitiesFromCity(String city) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreCiudad().equalsIgnoreCase(city))
-                .map(PostalCode::getNombreMunicipio)
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getAllPostalCodesFromState(String state) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreEntidad().equalsIgnoreCase(state))
-                .map(PostalCode::getCpAsentamiento)
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getAllPostalCodesFromCity(String city) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreCiudad().equalsIgnoreCase(city))
-                .map(PostalCode::getCpAsentamiento)
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getAllPostalCodesFromMunicipality(String state, String municipality) {
-        return postalCodeList.stream()
-                .filter(p -> p.getNombreEntidad().equalsIgnoreCase(state))
-                .filter(p -> p.getNombreMunicipio().equalsIgnoreCase(municipality))
-                .map(PostalCode::getCpAsentamiento)
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    public long getTotalPostalCodes() {
-        return postalCodeList.stream()
-                .map(PostalCode::getCpAsentamiento)
+                .filter(spec::isSatisfiedBy)
+                .map(mapper)
                 .distinct()
                 .count();
     }
 
-    public int getTotalStates() {
-        return getAllStates().size();
-    }
-
-    public int getTotalCities() {
-        return getAllCities().size();
-    }
-
-    public int getTotalMunicipalities() {
-        return getAllMunicipalities().size();
-    }
-
-    public List<String> getAllPostalCodes() {
+    /**
+     * Gets the count of all distinct values based on a mapper.
+     * @param mapper The function to map the PostalCode object to a String.
+     * @return The count of all distinct values.
+     */
+    public long getCountDistinct(Function<PostalCode, String> mapper) {
         return postalCodeList.stream()
-                .map(PostalCode::getCpAsentamiento)
+                .map(mapper)
                 .distinct()
-                .collect(Collectors.toList());
+                .count();
     }
 
-    public List<PostalCode> getAllRawData() {
+    /**
+     * Returns the complete, unfiltered list of postal codes.
+     * @return The raw list of postal codes.
+     */
+    public List<PostalCode> getAllData() {
         return postalCodeList;
     }
 

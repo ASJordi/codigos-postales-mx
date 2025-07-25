@@ -16,7 +16,6 @@ public class Analyzer {
 
     private Analyzer() {
         this.reader = new PostalCodeDataLoader();
-//         this.reader = new PostalCodeRepository();
         init();
     }
 

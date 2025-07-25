@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d [%t] %p %c - %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+        <File name="MAIN" fileName="logs/main.log">
+            <PatternLayout>
+                <Pattern>%d [%t] %p %c - %m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <File name="DEBUG_LOG" fileName="logs/debug.log">
+            <PatternLayout>
+                <Pattern>%d [%t] %p %c - %m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="CONSOLE" level="INFO" />
+            <AppenderRef ref="MAIN" level="INFO" />
+        </Root>
+        <Logger name="dev.asjordi" level="DEBUG">
+            <AppenderRef ref="CONSOLE" level="DEBUG" />
+            <AppenderRef ref="DEBUG_LOG" />
+        </Logger>
+    </Loggers>
+</Configuration>
